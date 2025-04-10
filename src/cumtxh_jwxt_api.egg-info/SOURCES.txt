@@ -1,0 +1,8 @@
+LICENSE
+README.md
+setup.py
+src/cumtxh_jwxt_api.egg-info/PKG-INFO
+src/cumtxh_jwxt_api.egg-info/SOURCES.txt
+src/cumtxh_jwxt_api.egg-info/dependency_links.txt
+src/cumtxh_jwxt_api.egg-info/requires.txt
+src/cumtxh_jwxt_api.egg-info/top_level.txt
