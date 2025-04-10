@@ -191,8 +191,9 @@ def main():
     from src.school_api.client import JwxtClient
     from src.school_api.models.student import Student
     
-    json_path = 'd:\\PcStudy\\school-api-master\\out\\schedule_2024_2.json'
-    output_dir = 'd:\\PcStudy\\school-api-master\\out'
+    # 修改为新的输出路径
+    output_dir = os.path.join('d:\\PcStudy\\fzsdk', 'out', 'schedule')
+    json_path = os.path.join(output_dir, 'schedule_2024_2.json')
     
     # 确保输出目录存在
     os.makedirs(output_dir, exist_ok=True)

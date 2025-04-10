@@ -1,17 +1,30 @@
 import sys
 import os
+import json
+import configparser
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.school_api.client import JwxtClient
 from src.school_api.models.student import Student
-import json
 
 def main():
+    # 读取配置文件 - 使用绝对路径确保能找到文件
+    config = configparser.ConfigParser()
+    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'config.ini')
+    config.read(config_path)
+    
     # 创建客户端
     client = JwxtClient()
     
-    # 登录 - 建议从环境变量或配置文件读取
-    student = Student(os.getenv("JWXT_USERNAME"), os.getenv("JWXT_PASSWORD"))
+    # 从配置文件获取登录信息
+    try:
+        username = config.get('jwxt', 'username')
+        password = config.get('jwxt', 'password')
+    except (configparser.NoSectionError, configparser.NoOptionError) as e:
+        print(f"配置文件错误: {e}")
+        return
+
+    student = Student(username, password)
     login_result = client.login(student)
     
     if login_result["status"] == "success":

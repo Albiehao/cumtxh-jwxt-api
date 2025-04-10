@@ -1,17 +1,30 @@
 import sys
 import os
 import json
+import configparser
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from src.school_api.client import JwxtClient
 from src.school_api.models.student import Student
 
 def main():
-    # 创建客户端
-    client = JwxtClient()
+    # 读取配置文件 - 使用绝对路径确保能找到文件
+    config = configparser.ConfigParser()
+    config_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'config.ini')
+    config.read(config_path)
     
-    # 登录
-    student = Student("2223041646", "zjh20041014")
+    # 创建客户端
+    client = JwxtClient()  # 这行被遗漏了，需要添加
+    
+    # 从配置文件获取登录信息
+    try:
+        username = config.get('jwxt', 'username')
+        password = config.get('jwxt', 'password')
+    except (configparser.NoSectionError, configparser.NoOptionError) as e:
+        print(f"配置文件错误: {e}")
+        return
+
+    student = Student(username, password)
     login_result = client.login(student)
     
     if login_result["status"] == "success":
@@ -53,10 +66,12 @@ def main():
             print()
         
         # 保存为JSON文件
-        os.makedirs("out/exam", exist_ok=True)
-        with open("out/exam/exams.json", "w", encoding="utf-8") as f:
+        output_dir = os.path.join('d:\\PcStudy\\fzsdk', 'out', 'exam')
+        os.makedirs(output_dir, exist_ok=True)
+        json_path = os.path.join(output_dir, 'exams.json')
+        with open(json_path, "w", encoding="utf-8") as f:
             json.dump(all_exams_data, f, ensure_ascii=False, indent=4)
-        print("\n考试信息已保存到 out/exam/exams.json")
+        print(f"\n考试信息已保存到 {json_path}")
         
     else:
         print("登录失败，无法获取考试信息")

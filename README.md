@@ -1,154 +1,146 @@
-# 中国矿业大学徐海学院教务系统 API
+# 中国矿业大学徐海学院教务系统API
 
-这是一个用于访问中国矿业大学徐海学院教务系统的 Python SDK，提供了简单易用的接口来获取教务系统数据。
+[![Python Version](https://img.shields.io/badge/python-3.6%2B-blue)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-## ✨ 功能特性
+本项目提供对中国矿业大学徐海学院教务系统的API封装，方便开发者快速接入和使用教务系统功能。
 
-- 🔐 教务系统安全登录
-- 📅 课程表查询与解析
-- 📤 课程表多格式导出
-  - JSON 格式（便于数据处理）
-  - ICS 格式（支持导入到各类日历应用）
-- 📊 课程数据智能分析
-  - 课程统计
-  - 教师分布
-  - 教室使用情况
+## 功能特性
 
-## 🚀 快速开始
+- ✅ 学生登录认证
+- 📅 课程表查询
+- 📝 考试成绩查询
+- 📆 考试安排查询
+- 🔄 数据导出(JSON/iCalendar格式)
 
-### 安装
+## 项目结构
+
+ ```
+📦 school-api-master
+├── 📂 data                      # 数据文件目录
+│   └── 📄 schedule_2024_2.json  # 课程表数据示例
+├── 📂 examples                  # 示例代码目录
+│   ├── 📄 login_example.py      # 登录示例
+│   ├── 📄 schedule_example.py   # 课程表查询示例
+│   ├── 📄 exam_example.py       # 考试信息示例
+│   ├── 📄 score_example.py      # 成绩查询示例
+│   └── 📄 schedule_formatter.py # 课程表格式化工具
+├── 📂 src                       # 源代码目录
+│   └── 📂 school_api           # API核心模块
+│       ├── 📂 models           # 数据模型
+│       │   ├── 📄 course.py    # 课程模型
+│       │   ├── 📄 schedule.py  # 课程表模型
+│       │   └── 📄 student.py   # 学生模型
+│       └── 📄 client.py        # API客户端
+├── 📂 tests                     # 测试目录
+├── 📄 setup.py                  # 项目安装配置
+└── 📄 requirements.txt          # 项目依赖
+```
+
+
+
+
+## 快速开始
+
+### 安装依赖
 
 ```bash
-pip install cumtxh-jwxt-api
-```
+pip install -r requirements.txt
+ ```
 
-### 基础使用
 
+### 配置账号
+编辑 config.ini 文件：
+
+```ini
+[jwxt]
+username = 您的学号
+password = 您的密码
+ ```
+
+### 使用示例
 ```python
-from school_api.client import JwxtClient
-from school_api.models.student import Student
+from src.school_api.client import JwxtClient
+from src.school_api.models.student import Student
 
-# 创建客户端并登录
+# 创建客户端
 client = JwxtClient()
+
+# 创建学生对象
 student = Student("学号", "密码")
+
+# 登录
 login_result = client.login(student)
 
-# 获取课程表
 if login_result["status"] == "success":
+    # 获取课程表
     schedule = client.get_schedule(year="2024-2025", term=2)
-    for course in schedule.courses:
-        print(f"课程：{course.name}")
-        print(f"教师：{course.teacher}")
-        print(f"地点：{course.location}")
-        print(f"时间：{course.time}")
-        print(f"周次：{course.weeks}")
+    print(schedule)
+else:
+    print("登录失败")
+ ```
+
+
+## 示例代码
+项目提供了多个使用示例，位于 examples 目录：
+
+```
+from src.school_api.client import JwxtClient
+from src.school_api.models.student import Student
+
+# 创建客户端
+client = JwxtClient()
+
+# 创建学生对象
+student = Student("学号", "密码")
+
+# 登录
+login_result = client.login(student)
+
+if login_result["status"] == "success":
+    # 获取课程表
+    schedule = client.get_schedule(year="2024-2025", term=2)
+    print(schedule)
+else:
+    print("登录失败")
 ```
 
-### 导出课程表
+- login_example.py - 登录示例
+- schedule_example.py - 课程表查询示例
+- exam_example.py - 考试信息查询示例
+- score_example.py - 成绩查询示例
+- schedule_formatter.py - 课程表格式化工具
+## 数据导出
+支持将数据导出为多种格式：
 
-```python
-# 导出为 JSON
-schedule_data = [{
-    "name": course.name,
-    "teacher": course.teacher,
-    "location": course.location,
-    "time": course.time,
-    "weeks": course.weeks
-} for course in schedule.courses]
+- JSON格式
+- iCalendar格式(可导入到日历应用)
+- 文本表格格式
+## 贡献指南
+欢迎提交Pull Request或Issue。提交前请确保：
 
-with open("schedule.json", "w", encoding="utf-8") as f:
-    json.dump(schedule_data, f, ensure_ascii=False, indent=2)
+1. 代码符合PEP8规范
+2. 添加适当的单元测试
+3. 更新相关文档
+## 许可证
 
-# 导出为 ICS（日历格式）
-from datetime import datetime
-semester_start = datetime(2025, 2, 24)  # 设置学期开始日期
-calendar = generate_ics(schedule.courses, semester_start)
-with open("schedule.ics", "wb") as f:
-    f.write(calendar.to_ical())
-```
+本项目采用 [MIT 许可证](LICENSE)。
 
-## 📖 详细文档
+### 许可证条款摘要
 
-### JwxtClient 类
+- **允许**：
+  - 自由使用、复制、修改、合并、发布、分发
+  - 用于商业用途
+  - 允许子授权
+  
+- **要求**：
+  - 包含原始许可证和版权声明
+  
+- **免责声明**：
+  - 不提供任何担保
+  - 作者不对使用本软件造成的任何损害负责
 
-主要的客户端类，用于与教务系统交互。
-
-```python
-client = JwxtClient(base_url="http://jwxt.cumtxh.cn")
-```
-
-#### 方法
-
-- `login(student)`: 登录教务系统
-- `get_schedule(year, term)`: 获取指定学年学期的课程表
-
-### Student 类
-
-学生信息类，用于存储登录凭证。
-
-```python
-student = Student(username="学号", password="密码")
-```
-
-### Schedule 类
-
-课程表类，包含课程列表和相关操作。
-
-```python
-schedule = client.get_schedule(year="2024-2025", term=2)
-courses = schedule.courses  # 获取课程列表
-```
-
-## 🛠️ 开发环境要求
-
-- Python >= 3.6
-- requests >= 2.31.0
-- pycryptodome >= 3.19.0
-- icalendar >= 5.0.0
-
-## 📝 更新日志
-
-### v1.0.0 (2024-02-24)
-
-- 实现基础登录功能
-- 实现课程表查询
-- 支持 JSON 和 ICS 格式导出
-- 添加课程数据分析功能
-
-## 🤝 贡献指南
-
-欢迎提交 Issue 和 Pull Request！
-
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交改动 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 提交 Pull Request
-
-## 📄 许可证
-
-本项目采用 MIT 许可证 - 查看 [LICENSE](LICENSE) 文件了解详情
-
-## 🙏 致谢
-
-感谢所有为本项目做出贡献的开发者！
-
-## 📚 相关文档
-
-- [API 文档](docs/api.md)
-- [开发指南](docs/development.md)
-- [更新日志](docs/changelog.md)
-
-
-## 🔗 相关链接
-
-
-- [PyPI 项目主页](https://pypi.org/project/cumtxh-jwxt-api/)
-
-- [个人主页](https://github.com/Albiehao)
-
-- [问题反馈](https://github.com/Albiehao/cumtxh-jwxt-api/issues)
-- [个人主页](https://github.com/Albiehao)
+完整许可证内容请查看项目根目录下的 [LICENSE](LICENSE) 文件。
 
 ## 📧 联系方式
 
