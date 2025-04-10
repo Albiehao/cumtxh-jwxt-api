@@ -3,6 +3,7 @@ import os
 from datetime import datetime, timedelta
 from icalendar import Calendar, Event
 from prettytable import PrettyTable
+from calendar_service.ics_generator import generate_ics
 
 def parse_weeks(weeks_str):
     """解析周次字符串"""
@@ -183,16 +184,14 @@ def generate_ics(json_path, semester_start_date):
     return cal
 
 def main():
-    import sys
-    import os
     # 添加项目根目录到 Python 路径
     sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     
     from src.school_api.client import JwxtClient
     from src.school_api.models.student import Student
     
-    # 修改为新的输出路径
-    output_dir = os.path.join('d:\\PcStudy\\fzsdk', 'out', 'schedule')
+    # 修改为相对输出路径
+    output_dir = os.path.join('..', 'out', 'schedule')
     json_path = os.path.join(output_dir, 'schedule_2024_2.json')
     
     # 确保输出目录存在
@@ -205,7 +204,14 @@ def main():
     
     if login_result["status"] == "success":
         print("登录成功，开始获取课程表...")
-        schedule = client.get_schedule(year="2024-2025", term=2)
+        
+        # 添加自动更新选项
+        if input("是否启用自动更新服务? (y/n): ").lower() == 'y':
+            update_interval = int(input("请输入更新间隔(小时): ") or 24)
+            auto_update_schedule(update_interval)
+        else:
+            # 原有单次生成逻辑
+            schedule = client.get_schedule(year="2024-2025", term=2)
         
         # 将课程对象转换为字典列表
         courses_data = []
@@ -234,6 +240,10 @@ def main():
         with open(ics_path, 'wb') as f:
             f.write(calendar.to_ical())
         print(f"课程表已保存为iCalendar格式：{ics_path}")
+        
+        # 提示用户可以使用独立服务
+        print("\n如需启动日历服务，请运行：")
+        print("python ..\\calendar_service\\manager.py")
     else:
         print("登录失败，无法获取课程表")
 

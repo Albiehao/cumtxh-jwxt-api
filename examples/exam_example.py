@@ -66,13 +66,13 @@ def main():
             print()
         
         # 保存为JSON文件
-        output_dir = os.path.join('d:\\PcStudy\\fzsdk', 'out', 'exam')
+        output_dir = os.path.join('..', 'out', 'exam')
         os.makedirs(output_dir, exist_ok=True)
         json_path = os.path.join(output_dir, 'exams.json')
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(all_exams_data, f, ensure_ascii=False, indent=4)
         print(f"\n考试信息已保存到 {json_path}")
-        
+
     else:
         print("登录失败，无法获取考试信息")
 
