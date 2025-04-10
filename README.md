@@ -150,6 +150,3 @@ else:
 - Email: 1185902279@qq.com
 - GitHub: [@Albiehao](https://github.com/Albiehao)
 
-## 🌟 Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=Albiehao/cumtxh-jwxt-api&type=Date)](https://star-history.com/#Albiehao/cumtxh-jwxt-api&Date)
