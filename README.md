@@ -1,5 +1,6 @@
-# 中国矿业大学徐海学院教务系统 SDK
+# 方正教务系统 SDK
 
+![GitHub Stars](https://img.shields.io/github/stars/Albiehao/cumtxh-jwxt-api?style=social)
 ![Python Version](https://img.shields.io/badge/python-3.6%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
@@ -71,17 +72,19 @@ export_ics(schedule, "schedule.ics", semester_start=datetime(2024, 2, 26))
 
 欢迎提交Issue和Pull Request
 
+
 ## 许可证
 
-MIT License
-```
+本项目采用 [MIT License](LICENSE) 开源许可证。
 
-这个README改进包括：
-1. 添加了更专业的徽章
-2. 更清晰的功能列表
-3. 更详细的代码示例
-4. 核心API文档表格
-5. 明确的示例指引
-6. 标准化许可证声明
+### 主要授权条款
+- 允许自由使用、复制、修改、合并、出版发行、散布、再授权及销售软件
+- 允许修改源代码，但必须在所有副本中包含原始版权声明和许可声明
+- 软件按"原样"提供，不承担任何明示或暗示的担保责任
 
-需要调整任何部分或添加更多内容吗？
+完整许可条款请查看项目根目录下的 [LICENSE](LICENSE) 文件。
+
+## 🌟 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Albiehao/cumtxh-jwxt-api&type=Date)](https://star-history.com/#Albiehao/cumtxh-jwxt-api&Date)
+
